@@ -5,11 +5,17 @@
 #include <Gl\GLAUX.H>		// Header File For The Glaux Library
 #include <cmath>
 #include<texture.h>
+
+//#include <math.h>
+
 //#include "texture.h"
+#include"Position.h"
 #include "camera.h"
 #include"3DTexture.h"
 #include"Model_3DS.h"
 //#include <fstream>
+
+# define M_PI           3.14159265358979323846
 
 HDC			hDC = NULL;		// Private GDI Device Context
 HGLRC		hRC = NULL;		// Permanent Rendering Cntext
@@ -49,7 +55,7 @@ Camera MyCamera;
 int  image, image2, image3, floorImg, wallImg;
 
 //parts of alaqsa
-int doorOfMosque,wall, wall1,wall5,wall4, roof,
+int doorOfMosque, wall1, roof, column,yellow,carpet, crescent,
 //the top side
 	topWall1;
 bool convert = false;
@@ -59,399 +65,311 @@ bool convert = false;
 int SKYFRONT, SKYBACK, SKYLEFT, SKYRIGHT, SKYUP, SKYDOWN;
 
 // model 3d
-Model_3DS* mosque;
+Model_3DS* tree;
 
-/// 
-double toTry = 2;
-int circle_centers[10][2] = { {0,0},{0,1}, {0,2},
-							{0,3},{0,4},{0,5},
-							{0,6},{0,7},{0,8},{0,9} 
-					};
-int circle_radii[10];int i = 0;
 
 GLUquadric *quadric = gluNewQuadric();
 
 
-
-void Draw_alaqsa() {
+//draw octagon
+void Draw_alaqsa(int door = -1, int wallMosque = -1, int carpet = -1) {
 	
 	glTranslated(0, 0, -20);
-	/*
-	glPushMatrix();
-	glTranslated(-openDoor, 0, 0);
-	glBegin(GL_QUADS);
-		glVertex3d(0.37,-0.8,0.01);
-		glVertex3d(0.57,-0.8,0.01);
-		glVertex3d(0.57,0.3,0.01);
-		glVertex3d(0.37,0.3,0.01);
-	glEnd();
-	glPopMatrix();
 	
-	glPushMatrix();
-	glTranslated(openDoor, 0, 0);
-	glBegin(GL_QUADS);
-	glVertex3d(0.57, -0.8, 0.01);
-	glVertex3d(0.77, -0.8, 0.01);
-	glVertex3d(0.77, 0.3, 0.01);
-	glVertex3d(0.57, 0.3, 0.01);
-	glEnd();
-	glPopMatrix();
-	*/
+	if (door != -1) {
+		//first door
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, door);
 
-	//first door
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, doorOfMosque);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);
+		glVertex3d(-1, -1, 0);
 
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3d(-1, -1, 0);
+		glTexCoord2d(1, 0);
+		glVertex3d(2, -1, 0);
 
-	glTexCoord2d(1, 0);
-	glVertex3d(2, -1, 0);
+		glTexCoord2d(1, 1);
+		glVertex3d(2, 2, 0);
 
-	glTexCoord2d(1, 1);
-	glVertex3d(2, 2, 0);
+		glTexCoord2d(0, 1);
+		glVertex3d(-1, 2, 0);
 
-	glTexCoord2d(0, 1);
-	glVertex3d(-1, 2, 0);
+		glEnd();
+		glPopMatrix();
+	}
 
-	glEnd();
-	glPopMatrix();
-	
 	//first wall (on the left)
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, wall1);
+	if (wallMosque != -1) {
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, wallMosque);
 
-	glBegin(GL_QUADS);
-	
-	glTexCoord2d(0, 0);
-	glVertex3d(-4, -1, -3);
+		glBegin(GL_QUADS);
 
-	glTexCoord2d(1, 0);
-	glVertex3d(-1, -1, 0);
+		glTexCoord2d(0, 0);
+		glVertex3d(-4, -1, -3);
 
-	glTexCoord2d(1, 1);
-	glVertex3d(-1, 2, 0);
+		glTexCoord2d(1, 0);
+		glVertex3d(-1, -1, 0);
 
-	glTexCoord2d(0, 1);
-	glVertex3d(-4, 2, -3);
-	
+		glTexCoord2d(1, 1);
+		glVertex3d(-1, 2, 0);
 
-	glEnd();
+		glTexCoord2d(0, 1);
+		glVertex3d(-4, 2, -3);
 
-	glPopMatrix();
+
+		glEnd();
+
+		glPopMatrix();
+	}
 	
 	//second door
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, doorOfMosque);
+	if (door != -1) {
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, door);
 
-	glBegin(GL_QUADS);
+		glBegin(GL_QUADS);
 
-	glTexCoord2d(0, 0);
-	glVertex3d(-4, -1, -3);
-	
-	glTexCoord2d(1, 0);
-	glVertex3d(-4, -1, -6);
+		glTexCoord2d(0, 0);
+		glVertex3d(-4, -1, -3);
+
+		glTexCoord2d(1, 0);
+		glVertex3d(-4, -1, -6);
 
 
-	glTexCoord2d(1, 1);
-	glVertex3d(-4, 2, -6);
-	
-	glTexCoord2d(0, 1);
-	glVertex3d(-4, 2, -3);
+		glTexCoord2d(1, 1);
+		glVertex3d(-4, 2, -6);
 
-	glEnd();
-	glPopMatrix();
-	
+		glTexCoord2d(0, 1);
+		glVertex3d(-4, 2, -3);
+
+		glEnd();
+		glPopMatrix();
+	}
 
 	//second wall
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D,wall1);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3d(-1, -1, -9);
+	if (wallMosque != -1) {
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, wallMosque);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);
+		glVertex3d(-1, -1, -9);
 
-	glTexCoord2d(0, 1);
-	glVertex3d(-1, 2, -9);
+		glTexCoord2d(0, 1);
+		glVertex3d(-1, 2, -9);
 
-	glTexCoord2d(1, 1);
-	glVertex3d(-4, 2, -6);
+		glTexCoord2d(1, 1);
+		glVertex3d(-4, 2, -6);
 
-	glTexCoord2d(1, 0);
-	glVertex3d(-4, -1, -6);
-	glEnd();
-	glPopMatrix();
-
+		glTexCoord2d(1, 0);
+		glVertex3d(-4, -1, -6);
+		glEnd();
+		glPopMatrix();
+	}
 	
 	//third door
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, doorOfMosque);
+	if (door != -1) {
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, door);
 
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3d(-1, -1, -9);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);
+		glVertex3d(-1, -1, -9);
 
-	glTexCoord2d(1, 0);
-	glVertex3d(2, -1, -9);
+		glTexCoord2d(1, 0);
+		glVertex3d(2, -1, -9);
 
-	glTexCoord2d(1, 1);
-	glVertex3d(2, 2, -9);
+		glTexCoord2d(1, 1);
+		glVertex3d(2, 2, -9);
 
-	glTexCoord2d(0, 1);
-	glVertex3d(-1, 2, -9);
+		glTexCoord2d(0, 1);
+		glVertex3d(-1, 2, -9);
 
-	glEnd();
-	glPopMatrix();
-
+		glEnd();
+		glPopMatrix();
+	}
 
 
 	//third wall 
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, wall1);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3d(2, -1, -9);
+	if (wallMosque != -1) {
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, wallMosque);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);
+		glVertex3d(2, -1, -9);
 
-	glTexCoord2d(0, 1);
-	glVertex3d(2, 2, -9);
+		glTexCoord2d(0, 1);
+		glVertex3d(2, 2, -9);
 
-	glTexCoord2d(1, 1);
-	glVertex3d(5, 2, -6);
+		glTexCoord2d(1, 1);
+		glVertex3d(5, 2, -6);
 
-	glTexCoord2d(1, 0);
-	glVertex3d(5, -1, -6);
-	glEnd();
-	glPopMatrix();
-
-	//////////////fourth door////////////
-	//fourth door
+		glTexCoord2d(1, 0);
+		glVertex3d(5, -1, -6);
+		glEnd();
+		glPopMatrix();
+	}
 	
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, doorOfMosque);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3d(5, -1, -6);
+	//fourth door
+	if (door != -1) {
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, door);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);
+		glVertex3d(5, -1, -6);
 
-	glTexCoord2d(0, 1);
-	glVertex3d(5, 2, -6);
+		glTexCoord2d(0, 1);
+		glVertex3d(5, 2, -6);
 
-	glTexCoord2d(1, 1);
-	glVertex3d(5, 2, -3);
+		glTexCoord2d(1, 1);
+		glVertex3d(5, 2, -3);
 
-	glTexCoord2d(1, 0);
-	glVertex3d(5, -1, -3);
-	glEnd();
-	glPopMatrix();
-
+		glTexCoord2d(1, 0);
+		glVertex3d(5, -1, -3);
+		glEnd();
+		glPopMatrix();
+	}
 
 	//fourth wall 
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, wall1);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3d(5, -1, -3);
+	if (wallMosque != -1) {
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, wallMosque);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);
+		glVertex3d(5, -1, -3);
 
-	glTexCoord2d(0, 1);
-	glVertex3d(5, 2, -3);
+		glTexCoord2d(0, 1);
+		glVertex3d(5, 2, -3);
 
-	glTexCoord2d(1, 1);
-	glVertex3d(2, 2, 0);
+		glTexCoord2d(1, 1);
+		glVertex3d(2, 2, 0);
 
-	glTexCoord2d(1, 0);
-	glVertex3d(2, -1, 0);
-	glEnd();
-	glPopMatrix();
-
-	///////////////////////////سقف1
+		glTexCoord2d(1, 0);
+		glVertex3d(2, -1, 0);
+		glEnd();
+		glPopMatrix();
+	}
+	
+	
+	
+	// the ground
 	//
-	/*
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glVertex3d(-1, 1.9, 0);
-	glVertex3d(-1, 1.9, -9);
-	glVertex3d(-4, 1.9, -6);
-	glVertex3d(-4, 1.9, -3);
-	glEnd();
-	glPopMatrix();
+	if (carpet != -1) {
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, carpet);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);
+		glVertex3d(-1, -1, 0);
 
-	//
-	glPushMatrix();
-	glBegin(GL_QUADS);
-		glVertex3d(2, 1.9, 0);
-		glVertex3d(2, 1.9, -9);
-		glVertex3d(5, 1.9, -6);
-		glVertex3d(5, 1.9, -3);
-	glEnd();
-	glPopMatrix();
+		glTexCoord2d(0, 9);
+		glVertex3d(-1, -1, -9);
 
-	//
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glVertex3d(2, 1.9, 0);
-	glVertex3d(2, 1.9, -9);
-	glVertex3d(-1,1.9, -9);
-	glVertex3d(-1, 1.9, 0);
-	glEnd();
-	glPopMatrix();
-	*/
-	//////////////////////////////سقف 2
-	/*
-	glPushMatrix();
-	//delete :
-	glTranslated(0, 4, 0);
-	glBegin(GL_QUADS);
-	glVertex3d(-1, 2, 0);
-	glVertex3d(-1, 2, -9);
-	glVertex3d(-4, 2, -6);
-	glVertex3d(-4, 2, -3);
-	glEnd();
-	glPopMatrix();
+		glTexCoord2d(3, 6);
+		glVertex3d(-4, -1, -6);
 
-	//
-	glPushMatrix();
-	//delete
-	glTranslated(0, 4, 0);
+		glTexCoord2d(3, 3);
+		glVertex3d(-4, -1, -3);
+		glEnd();
+		glPopMatrix();
 
-	glBegin(GL_QUADS);
-	glVertex3d(2, 2, 0);
-	glVertex3d(2, 2, -9);
-	glVertex3d(5, 2, -6);
-	glVertex3d(5, 2, -3);
-	glEnd();
-	glPopMatrix();
+		//
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, carpet);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);
+		glVertex3d(2, -1, -9);
 
-	//
-	glPushMatrix();
-	//delete
-	glTranslated(0, 4, 0);
+		glTexCoord2d(0, 9);
+		glVertex3d(2, -1, 0);
 
-	glBegin(GL_QUADS);
-	glVertex3d(2, 2, 0);
-	glVertex3d(2, 2, -9);
-	glVertex3d(-1, 2, -9);
-	glVertex3d(-1, 2, 0);
-	glEnd();
-	glPopMatrix();
+		glTexCoord2d(3, 6);
+		glVertex3d(5, -1, -3);
 
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glVertex3d(-1, 1.9, 0);
-	glVertex3d(-1, 1.9, -9);
-	glVertex3d(-4, 1.9, -6);
-	glVertex3d(-4, 1.9, -3);
-	glEnd();
-	glPopMatrix();
+		glTexCoord2d(3, 3);
+		glVertex3d(5, -1, -6);
 
-	//
-	glPushMatrix();
-	glBegin(GL_QUADS);
-		glVertex3d(2, 1.9, 0);
-		glVertex3d(2, 1.9, -9);
-		glVertex3d(5, 1.9, -6);
-		glVertex3d(5, 1.9, -3);
-	glEnd();
-	glPopMatrix();
 
-	//
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glVertex3d(2, 1.9, 0);
-	glVertex3d(2, 1.9, -9);
-	glVertex3d(-1,1.9, -9);
-	glVertex3d(-1, 1.9, 0);
-	glEnd();
-	glPopMatrix();
-	*/
-	/////////////// the ground
-	//
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glVertex3d(-1, -1, 0);
-	glVertex3d(-1, -1, -9);
-	glVertex3d(-4, -1, -6);
-	glVertex3d(-4, -1, -3);
-	glEnd();
-	glPopMatrix();
 
-	//
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glVertex3d(2, -1, 0);
-	glVertex3d(2, -1, -9);
-	glVertex3d(5, -1, -6);
-	glVertex3d(5, -1, -3);
-	glEnd();
-	glPopMatrix();
 
-	//
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glVertex3d(2, -1, 0);
-	glVertex3d(2, -1, -9);
-	glVertex3d(-1,-1, -9);
-	glVertex3d(-1,-1, 0);
-	glEnd();
-	glPopMatrix();
+		glEnd();
+		glPopMatrix();
 
+
+		//the middle rectangle 
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, carpet);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);
+		glVertex3d(-1, -1, -9);
+
+		glTexCoord2d(0, 9);
+		glVertex3d(-1, -1, 0);
+
+		glTexCoord2d(3, 9);
+		glVertex3d(2, -1, 0);
+
+		glTexCoord2d(3, 0);
+		glVertex3d(2, -1, -9);
+
+		glEnd();
+		glPopMatrix();
+	}
 	
 }
 
-/*
-void drawCylinder() {
+
+
+void DrawCylinder(float radius, float height, int num_segments,int texture =-1,Position temp = Position(0.0,0.0,0.0)) {
 	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, window);
-	glBegin(GL_QUADS);
-		glTexCoord2d(0, 0);
-		glVertex3d(-0.5,2,-4);
-		
-		glTexCoord2d(1, 0);
-		glVertex3d(0.5,2,-4);
+	if (texture != -1) {
+		glBindTexture(GL_TEXTURE_2D, texture);
+		//glTranslated(0.7, 4.7, -4.7);
+		glTranslated(temp.getX(), temp.getY(), temp.getZ());
+		glRotated(180, 0, 0, 1);
 
-		glTexCoord2d(1, 1);
-		glVertex3d(0.5,3.5,-4);
-
-		glTexCoord2d(0, 1);
-		glVertex3d(-0.5,3.5,-4);
-	glEnd();
-	glPopMatrix();
-	
-	// /*
-	//glPushMatrix();
-	//glBindTexture(GL_TEXTURE_2D, glass);
-	//glBegin(GL_QUADS);
-	//glVertex3d(0.5, 2, -5);
-	//glVertex3d(1, 2, -5);
-	//glVertex3d(1, 3, -5);
-	//glVertex3d(0.5, 3, -5);
-	//glEnd();
-	// glPopMatrix();
-	
-}*/
-
-
-void DrawCylinder(float radius, float height, int num_segments) {
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, topWall1);
-	glTranslated(0.7, 4.7, -4.7);
-	glRotated(180,0, 0, 1);
-	
-	glBegin(GL_QUADS);	
-	for (int i = 0; i < num_segments; i++) {
-		float theta1 = 2.0f * 3.1415926f * float(i) / float(num_segments);
-		float theta2 = 2.0f * 3.1415926f * float(i + 1) / float(num_segments);
-		float s1 = float(i) / float(num_segments);
-		float s2 = float(i + 1) / float(num_segments);
-		// Side face
-		glTexCoord2f(s1, 0);
-		glVertex3f(radius * cosf(theta1), height, radius * sinf(theta1));
-		glTexCoord2f(s2, 0);
-		glVertex3f(radius * cosf(theta2), height, radius * sinf(theta2));
-		glTexCoord2f(s2, 1);
-		glVertex3f(radius * cosf(theta2), 0, radius * sinf(theta2));
-		glTexCoord2f(s1, 1);
-		glVertex3f(radius * cosf(theta1), 0, radius * sinf(theta1));
+		glBegin(GL_QUADS);
+		for (int i = 0; i < num_segments; i++) {
+			float theta1 = 2.0f * 3.1415926f * float(i) / float(num_segments);
+			float theta2 = 2.0f * 3.1415926f * float(i + 1) / float(num_segments);
+			float s1 = float(i) / float(num_segments);
+			float s2 = float(i + 1) / float(num_segments);
+			// Side face
+			glTexCoord2f(s1, 0);
+			glVertex3f(radius * cosf(theta1), height, radius * sinf(theta1));
+			glTexCoord2f(s2, 0);
+			glVertex3f(radius * cosf(theta2), height, radius * sinf(theta2));
+			glTexCoord2f(s2, 1);
+			glVertex3f(radius * cosf(theta2), 0, radius * sinf(theta2));
+			glTexCoord2f(s1, 1);
+			glVertex3f(radius * cosf(theta1), 0, radius * sinf(theta1));
+		}
+		glEnd();
 	}
-	glEnd();
+	else {
+		glBindTexture(GL_TEXTURE_2D, texture);
+		//glTranslated(0.7, 4.7, -4.7);
+		glTranslated(temp.getX(), temp.getY(), temp.getZ());
+		glRotated(180, 0, 0, 1);
+
+		glBegin(GL_QUADS);
+		for (int i = 0; i < num_segments; i++) {
+			float theta1 = 2.0f * 3.1415926f * float(i) / float(num_segments);
+			float theta2 = 2.0f * 3.1415926f * float(i + 1) / float(num_segments);
+			float s1 = float(i) / float(num_segments);
+			float s2 = float(i + 1) / float(num_segments);
+			// Side face
+			glTexCoord2f(s1, 0);
+			glVertex3f(radius * cosf(theta1), height, radius * sinf(theta1));
+			glTexCoord2f(s2, 0);
+			glVertex3f(radius * cosf(theta2), height, radius * sinf(theta2));
+			glTexCoord2f(s2, 1);
+			glVertex3f(radius * cosf(theta2), 0, radius * sinf(theta2));
+			glTexCoord2f(s1, 1);
+			glVertex3f(radius * cosf(theta1), 0, radius * sinf(theta1));
+		}
+
+		glEnd();
+	}
 	glPopMatrix();
 	/////////////
 	/*
@@ -613,28 +531,153 @@ void draw_the_top() {
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-void DrawCircle(float x, float y, float radius, int num_segments) {
-	glBegin(GL_TRIANGLE_FAN);
-	for (int i = 0; i < num_segments; i++) {
-		float theta = 2.0f * 3.1415926f * float(i) / float(num_segments);
-		float dx = radius * cosf(theta);
-		float dy = radius * sinf(theta);
-		glVertex2f(x + dx, y + dy);
+//rectangel
+void draw_rectangles() {
+	
+	glBegin(GL_LINE_STRIP);
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(1.5, 0.0, 0.0);
+	glVertex3f( 1.5, 0.0, -1.0);
+	glVertex3f(0.0, 0.0 , -1.0);
+
+	glVertex3f(0.0, 0.5, -0.5);
+	glVertex3f(0.0, 0.5, 0.0);
+	glVertex3f(0.5, 0.5, 0.0);
+	glVertex3f(0.5, 0.5, -0.5);
+	glEnd();
+	
+}
+//column
+void draw_column(int radius, int height, int num_segments,Position temp = Position(0.0,0.0,0.0)) {
+	double angle_increment = 2 * 3.14 / num_segments;
+	double x, y;
+	
+	
+	glPushMatrix();
+	glTranslated(temp.getX(),temp.getY(),temp.getZ());
+	
+	glBindTexture(GL_TEXTURE_2D, column);
+	glBegin(GL_QUAD_STRIP);
+	for (int i = 0; i <= num_segments; i++) {
+		x = radius * cos(i * angle_increment);
+		y = radius * sin(i * angle_increment);
+		glTexCoord2f((float)i / num_segments, 0.0f);
+		glVertex3d(x, 0, y);
+		glTexCoord2f((float)i / num_segments, 1.0f);
+		glVertex3d(x, height, y);
 	}
 	glEnd();
+	glPopMatrix();
+	
 }
 
-void Draw_multi_circles(int num_circles,int num_segemnts) {
-	for (; i < num_circles; i+=0.001) {
-		float x = circle_centers[i][0];
-		float y = circle_centers[i][1];
-		float radius = circle_radii[i];
-		DrawCircle(x, y, radius, num_segemnts);
+void draw_rectangle(Position temp = Position(0, 0, 0) , int texture = - 1) {
+	//front
+	glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0); glVertex3d(temp.getX() - 0.1, temp.getY() + 2, temp.getZ());
+		glTexCoord2d(1, 0); glVertex3d(temp.getX() + 0.1, temp.getY() + 2, temp.getZ());
+		glTexCoord2d(1, 1); glVertex3d(temp.getX() + 0.1, temp.getY() + 4, temp.getZ());
+		glTexCoord2d(0, 1); glVertex3d(temp.getX() - 0.1, temp.getY() + 4, temp.getZ());
+
+		glEnd();
+	glPopMatrix();
+	//right
+	glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);  glVertex3d(temp.getX() + 0.1, temp.getY() + 2, temp.getZ());
+		glTexCoord2d(1, 0); glVertex3d(temp.getX() + 0.1, temp.getY() + 2, temp.getZ() - 0.1);
+		glTexCoord2d(1, 1); glVertex3d(temp.getX() + 0.1, temp.getY() + 4, temp.getZ() - 0.1);
+		glTexCoord2d(0, 1); glVertex3d(temp.getX() + 0.1, temp.getY() + 4, temp.getZ());
+		glEnd();
+	glPopMatrix();
+	//back
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0); glVertex3d(temp.getX() - 0.1, temp.getY() + 2, temp.getZ() - 0.1);
+	glTexCoord2d(1, 0); glVertex3d(temp.getX() + 0.1, temp.getY() + 2, temp.getZ() - 0.1);
+	glTexCoord2d(1, 1); glVertex3d(temp.getX() + 0.1, temp.getY() + 4, temp.getZ() - 0.1);
+	glTexCoord2d(0, 1); glVertex3d(temp.getX() - 0.1, temp.getY() + 4, temp.getZ() - 0.1);
+
+	glEnd();
+	glPopMatrix();
+
+	//left
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0); glVertex3d(temp.getX() - 0.1, temp.getY() + 2, temp.getZ());
+	glTexCoord2d(1, 0); glVertex3d(temp.getX() - 0.1, temp.getY() + 2, temp.getZ() - 0.1);
+	glTexCoord2d(1, 1); glVertex3d(temp.getX() - 0.1, temp.getY() + 4, temp.getZ() - 0.1);
+	glTexCoord2d(0, 1); glVertex3d(temp.getX() - 0.1, temp.getY() + 4, temp.getZ());
+	glEnd();
+	glPopMatrix();
+
+}
+
+//dome
+void DrawDome(float rad, int texture=-1 , Position center = Position(0, 0, 0))
+{	
+	glPushMatrix();
+	//glTranslated(0,7,0);
+	glPopMatrix();
+	glPushMatrix();
+	draw_rectangle(center,crescent);
+	//DrawCylinder(0.10, 1.5, 25, crescent, Position(center.getX(), center.getY() + 3.5, center.getZ()));
+
+	glTranslated(center.getX(), center.getY(), center.getZ());
+	float lastcenter = rad * sin(3.14 / 2);
+	float lastr = rad * cos(3.14 / 2);
+	for (float vertical = 3.14 / 2.0; vertical >= 0; vertical -= 0.1)
+	{
+
+
+		float centeri = rad * sin(vertical);
+		float ri = rad * cos(vertical);
+		int col = 0;
+		for (float horizin = 0; horizin <= 2 * 3.14 + 0.1; horizin += 0.1)
+		{
+			Position a = Position(ri * cos(horizin), centeri, ri * sin(horizin));
+			Position b = Position(ri * cos(horizin + 0.1), centeri, ri * sin(horizin + 0.1));
+			Position c = Position(lastr * cos(horizin), lastcenter, lastr * sin(horizin));
+			Position d = Position(lastr * cos(horizin + 0.1), lastcenter, lastr * sin(horizin + 0.1));
+			if (texture != -1)
+			{
+				glBindTexture(GL_TEXTURE_2D, texture);
+				glBegin(GL_QUADS);
+				glTexCoord2d(1 - (horizin) / (2 * 3.14), 0.5 + sin(vertical - 0.1) / 2.0);
+				glVertex3f(a.getX(), a.getY(), a.getZ());
+				glTexCoord2d(1 - (horizin + 0.1) / (2 * 3.14), 0.5 + sin(vertical - 0.1) / 2.0);
+				glVertex3f(b.getX(), b.getY(), b.getZ());
+				glTexCoord2d(1 - (horizin + 0.1) / (2 * 3.14), 0.5 + sin(vertical) / 2.0);
+				glVertex3f(d.getX(), d.getY(), d.getZ());
+				glTexCoord2d(1 - (horizin) / (2 * 3.14), 0.5 + sin(vertical) / 2.0);
+				glVertex3f(c.getX(), c.getY(), c.getZ());
+				glEnd();
+			}
+			else
+			{
+				glBegin(GL_QUADS);
+				glVertex3f(a.getX(), a.getY(), a.getZ());
+				glVertex3f(b.getX(), b.getY(), b.getZ());
+				glVertex3f(d.getX(), d.getY(), d.getZ());
+				glVertex3f(c.getX(), c.getY(), c.getZ());
+				glEnd();
+			}
+		}
+		lastr = ri;
+		lastcenter = centeri;
 	}
-}
+	//glTranslated(-center.getX(), -center.getY(), -center.getZ());
+
+	glPopMatrix();
+};
 
 
+////////////////////////////////////////////////////////////////////////////
 void drawUnitCube() {
 
 	glBegin(GL_QUADS);
@@ -880,6 +923,11 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	wall1 = LoadTexture((char*)"wall1.bmp", 255); //wall6
 	topWall1 = LoadTexture((char*)"R_3.bmp", 255); 
 	roof = LoadTexture((char*)"top2.bmp", 255);
+	column = LoadTexture((char*)"column2.bmp", 255);
+	yellow = LoadTexture((char*)"yellow.bmp", 255);
+	carpet = LoadTexture((char*)"carpet.bmp", 255);
+	crescent = LoadTexture((char*)"top.bmp", 255);
+	 //= LoadTexture((char*)".bmp", 255);
 	
 	//glDisable(GL_TEXTURE_2D);
 	
@@ -927,12 +975,13 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	
 	//Draw_Skybox(0, 0, 0, 100, 100, 100);
 	
-	//Draw_alaqsa();
-	//drawCylinder();
-	//DrawCylinder(2,2.3 , 7);
+	//Draw_alaqsa(doorOfMosque,wall1,carpet);
+	//DrawCylinder(2,2.3 , 7,topWall1,Position(0.7, 4.7, -4.7));
 	//draw_the_top();
+	//draw_column(1, 6, 50); // is ok
+	//draw_rectangles();
 	
-	Draw_multi_circles(10,25);
+	DrawDome(2, yellow, Position(0.7, 4.5, -4.7));
 	
 
 	///////////////////////////////////draw the ground///////////////////////

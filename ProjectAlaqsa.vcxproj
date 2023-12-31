@@ -154,6 +154,7 @@
     <ClCompile Include="3DTexture.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="Model_3DS.cpp" />
+    <ClCompile Include="Position.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <ClInclude Include="3DTexture.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="Model_3DS.h" />
+    <ClInclude Include="Position.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
