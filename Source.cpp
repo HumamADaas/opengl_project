@@ -622,11 +622,7 @@ void draw_rectangle(Position temp = Position(0, 0, 0) , int texture = - 1) {
 void DrawDome(float rad, int texture=-1 , Position center = Position(0, 0, 0))
 {	
 	glPushMatrix();
-	//glTranslated(0,7,0);
-	glPopMatrix();
-	glPushMatrix();
 	draw_rectangle(center,crescent);
-	//DrawCylinder(0.10, 1.5, 25, crescent, Position(center.getX(), center.getY() + 3.5, center.getZ()));
 
 	glTranslated(center.getX(), center.getY(), center.getZ());
 	float lastcenter = rad * sin(3.14 / 2);
@@ -975,9 +971,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	
 	//Draw_Skybox(0, 0, 0, 100, 100, 100);
 	
-	//Draw_alaqsa(doorOfMosque,wall1,carpet);
-	//DrawCylinder(2,2.3 , 7,topWall1,Position(0.7, 4.7, -4.7));
-	//draw_the_top();
+	Draw_alaqsa(doorOfMosque,wall1,carpet);
+	DrawCylinder(2,2.3 , 7,topWall1,Position(0.7, 4.7, -4.7));
+	draw_the_top();
 	//draw_column(1, 6, 50); // is ok
 	//draw_rectangles();
 	
